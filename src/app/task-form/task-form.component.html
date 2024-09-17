@@ -1,0 +1,65 @@
+<!-- Modal -->
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 pb-3 pt-3" id="staticBackdropLabel">Update Task</h1>
+            </div>
+            <div class="modal-body">
+              <form (ngSubmit)="updateTask()" #taskForm="ngForm">
+                <table class="table">
+                  <tr colspan="2">
+                    <td>
+                      <div class="mb-3">
+                        <label for="assignedTo" class="form-label required">Assigned To</label>
+                        <input type="text" class="form-control" [(ngModel)]="task.assignedTo" name="assignedTo"
+                          required>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mb-3">
+                        <label for="status" class="form-label required">Status</label>
+                        <input type="text" class="form-control" [(ngModel)]="task.status" name="status" required>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="mb-3">
+                        <label for="date" class="form-label required">Due Date</label>
+                        <input type="date" class="form-control" [(ngModel)]="task.date" name="date" required>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="mb-3">
+                        <label for="priority" class="form-label required">Priority</label>
+                        <input type="text" class="form-control" [(ngModel)]="task.priority" name="priority" required>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <label for="description" class="required">Description</label>
+                      <div class="form-floating">
+                        <textarea class="form-control" [(ngModel)]="task.description" name="description"
+                          style="height: 100px" required></textarea>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+                <div class="modal-footer mb-4">
+                  <button type="button" class="btn btn-secondary" routerLink="/">Close</button>
+                  <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<pre>{{ task | json }}</pre>

@@ -1,0 +1,120 @@
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand">
+      <i class="bi bi-list-check bg-danger p-2 rounded"></i>
+      Tasks
+    </a>
+    <form class="d-flex" role="search">
+      <div class="input-group">
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchTerm"
+          (input)="onSearch()">
+        <button class="btn" [ngClass]="{'btn-outline-secondary': !searchTerm, 'btn-success': searchTerm}" type="button"
+          (click)="onSearch()">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </form>
+    <div class="d-flex">
+      <div class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">New Task</div>
+      <div class="btn btn-sm btn-warning" (click)="refresh()">Refresh</div>
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-center" id="exampleModalLabel">New Task</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="taskForm">
+          <table class="table">
+            <tr colspan="2">
+              <td>
+                <div class="mb-3">
+                  <label for="assignedTo" class="form-label required">Assigned To</label>
+                  <input type="text" class="form-control" formControlName="assignedTo" id="assignedTo" required>
+                </div>
+              </td>
+              <td>
+                <div class="mb-3">
+                  <label for="status" class="form-label required">Status</label>
+                  <input type="text" class="form-control" formControlName="status" id="status" required>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="mb-3">
+                  <label for="date" class="form-label required">Due Date</label>
+                  <input type="date" class="form-control" formControlName="date" id="date" required>
+                </div>
+              </td>
+              <td>
+                <div class="mb-3">
+                  <label for="priority" class="form-label required">Priority</label>
+                  <input type="text" class="form-control" formControlName="priority" id="priority" required>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <label for="description" class="required">Description</label>
+                <div class="form-floating">
+                  <textarea class="form-control" formControlName="description" id="description" style="height: 100px"
+                    required></textarea>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="addTask(taskForm.value)"
+          [disabled]="taskForm.invalid">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table to display data added -->
+<div class="container-fluid mt-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Assigned To</th>
+        <th scope="col">Status</th>
+        <th scope="col">Due Date</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Comments</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr *ngFor="let item of (filteredData$ | async) | paginate: { itemsPerPage: itemsPerPage, currentPage: page }">
+        <td>{{ item.assignedTo }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.date }}</td>
+        <td>{{ item.priority }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false"></button>
+            <ul class="dropdown-menu">
+              <li><button [routerLink]="['/task-form', item.id]" class="dropdown-item"
+                  (click)="editTask(item.id)">Edit</button></li>
+              <li><a class="dropdown-item" (click)="delete(item.id)">Delete</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pagination-controls (pageChange)="page = $event"></pagination-controls>
+</div>
